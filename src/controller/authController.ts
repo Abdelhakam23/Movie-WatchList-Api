@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../config/db.ts";
 
 import bcrypt from "bcrypt";
+import { generateToken } from "../utils/generateToken.ts";
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -32,6 +33,7 @@ const register = async (req: Request, res: Response) => {
             password:hashedPassword
         }
     })
+    const token = generateToken(user.id,res);
     return res.status(201).json({
         status:"success",
         message:"User registered successfully",
@@ -40,7 +42,8 @@ const register = async (req: Request, res: Response) => {
             name:name,
             email:email,
             createdAt:user.createdAt,
-        }
+        },
+        token
     })
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
@@ -69,17 +72,28 @@ const login = async (req:Request, res : Response)=>{
     if(!isPasswordValid){
         return res.status(401).json({message:"Invalid Email or Password"});
     }
-
+    const token = generateToken(user.id,res);
     return res.status(200).json({
         status:'success',
         message:"User logged in successfully",
         user:{
             id:user.id,
             email:email
-        }
+        },
+        token
     })
-
-
 }
 
-export { register, login}
+const logout = async (req:Request, res:Response)=>{
+    res.cookie("jwt","",{
+        httpOnly:true,
+        expires: new Date(0)
+    })
+
+    return res.status(200).json({
+        status:"success",
+        message:"User logged out successfully"
+    })
+}
+
+export { register, login , logout}
