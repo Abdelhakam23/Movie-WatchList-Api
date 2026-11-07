@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "seed:movie": "tsx prisma/seedFile.ts"
   },
   "keywords": [],
   "type": "commonjs",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
     "prisma": "^6.19.3",
+    "ts-node": "^10.9.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
