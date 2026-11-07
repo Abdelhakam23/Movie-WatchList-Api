@@ -1,7 +1,8 @@
 import express from "express";
 import movieRoutes from './routes/movieRoutes.ts';
+import  authRoutes from './routes/authRoutes.ts'
 import {config} from 'dotenv';
-import { connectDB , disconnectDB} from './config/db.ts';
+import { connectDB } from './config/db.ts';
 
 config();
 connectDB();
@@ -9,6 +10,9 @@ connectDB();
 
 const app  = express();
 
+app.use(express.json());
+
+app.use('/api/auth',authRoutes)
 app.use("/movies",movieRoutes)
 const PORT = 5001;
 app.listen(PORT,()=>{
