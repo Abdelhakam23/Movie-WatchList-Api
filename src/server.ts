@@ -1,12 +1,15 @@
 import express from "express";
+import movieRoutes from './routes/movieRoutes.ts';
+import {config} from 'dotenv';
+import { connectDB , disconnectDB} from './config/db.ts';
+
+config();
+connectDB();
 
 
 const app  = express();
 
-app.get('/',(req,res)=>{
-    res.json({message:"Hello World"})
-
-})
+app.use("/movies",movieRoutes)
 const PORT = 5001;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
