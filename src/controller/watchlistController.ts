@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import {prisma} from '../config/db.ts'
+interface AuthRequest extends Request{
+    user?: any;
+}
 
 
-const addToWatchList = async(req: Request, res: Response) => {
+const addToWatchList = async(req: AuthRequest, res: Response) => {
 try {
     
-    const {movieId,userId,status,rating} = req.body;
+    const {movieId,status,rating,notes} = req.body;
 
     const isExistingMovie = await prisma.movie.findUnique({
         where:{
@@ -20,7 +23,7 @@ try {
     const isAddedToWatchList = await prisma.watchListItem.findUnique({
         where:{
             userId_movieId:{
-                userId:userId,
+                userId:req.user.id,
                 movieId:movieId
             }
         }
@@ -32,11 +35,11 @@ try {
 
     const watchListItem = await prisma.watchListItem.create({
         data:{
-            userId,
+            userId:req.user.id,
             movieId,
             status:status||"PLANNED",
             rating,
-            
+            notes
         }
     })
 
