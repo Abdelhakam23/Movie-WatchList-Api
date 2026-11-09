@@ -1,10 +1,11 @@
 import express from "express"
+import { getAllMovies, getMovieById } from "../controller/movieController";
 
  const router  = express.Router();
 
-router.get('/all',(req,res)=>{
-    res.json({message:"List of movies"})
-})
+router.get('/',getAllMovies)
+router.get('/:id',getMovieById)
+
 
 
 export default router;
